@@ -675,7 +675,8 @@ func TestLibBPFCompat(t *testing.T) {
 		file := filepath.Base(path)
 		switch file {
 		case "test_map_in_map.o", "test_map_in_map.linked3.o",
-			"test_select_reuseport_kern.o", "test_select_reuseport_kern.linked3.o":
+			"test_select_reuseport_kern.o", "test_select_reuseport_kern.linked3.o",
+			"bloom_filter_map.o", "bloom_filter_map.linked3.o":
 			t.Skip("Skipping due to missing InnerMap in map definition")
 		case "test_core_autosize.o":
 			t.Skip("Skipping since the test generates dynamic BTF")
@@ -683,6 +684,13 @@ func TestLibBPFCompat(t *testing.T) {
 			t.Skip("Skipping since .text contains 'subprog' twice")
 		case "linked_maps.linked3.o", "linked_funcs.linked3.o":
 			t.Skip("Skipping since weak relocations are not supported")
+		case "btf_type_tag.o", "btf_type_tag.linked3.o",
+			"btf_decl_tag.o", "btf_decl_tag.linked3.o":
+			t.Skip("Skipping due to unsupported BTF kinds")
+		case "bloom_filter_bench.o", "bloom_filter_bench.linked3.o":
+			t.Skip("Skipping due to missing MapExtra field in MapSpec")
+		case "netif_receive_skb.linked3.o":
+			t.Skip("Skipping due to failing CO-RE relocation")
 		}
 
 		t.Parallel()
